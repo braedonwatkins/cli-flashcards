@@ -12,40 +12,9 @@ import (
 	"github.com/muesli/gamut"
 )
 
-var (
-	dialogBoxStyle = lipgloss.NewStyle().
-			Border(lipgloss.RoundedBorder()).
-			BorderForeground(lipgloss.Color("#874BFD")).
-			Padding(1, 0).
-			BorderTop(true).
-			BorderLeft(true).
-			BorderRight(true).
-			BorderBottom(true)
+// RENDER - basically treating this like JSX
 
-	buttonStyle = lipgloss.NewStyle().
-			Foreground(lipgloss.Color("#FFF7DB")).
-			Background(lipgloss.Color("#888B7E")).
-			Padding(0, 3).
-			MarginTop(1)
-
-	activeButtonStyle = buttonStyle.
-				Foreground(lipgloss.Color("#FFF7DB")).
-				Background(lipgloss.Color("#F25D94")).
-				MarginRight(2).
-				Underline(true)
-
-	subtle = lipgloss.AdaptiveColor{Light: "#D9DCCF", Dark: "#383838"}
-	blends = gamut.Blends(lipgloss.Color("#F25D94"), lipgloss.Color("#EDFF82"), 50)
-)
-
-func rainbow(base lipgloss.Style, s string, colors []color.Color) string {
-	var str string
-	for i, ss := range s {
-		color, _ := colorful.MakeColor(colors[i%len(colors)])
-		str = str + base.Foreground(lipgloss.Color(color.Hex())).Render(string(ss))
-	}
-	return str
-}
+// // global state
 
 type model struct {
 	tea.Model
@@ -59,6 +28,8 @@ func initialModel() model {
 		Revealed:  false,
 	}
 }
+
+// // render functions
 
 func (m model) Init() tea.Cmd {
 	return nil
@@ -118,4 +89,41 @@ func (m model) View() string {
 	}
 
 	return s.String()
+}
+
+// STYLE - basically treating this like CSS
+
+var (
+	dialogBoxStyle = lipgloss.NewStyle().
+			Border(lipgloss.RoundedBorder()).
+			BorderForeground(lipgloss.Color("#874BFD")).
+			Padding(1, 0).
+			BorderTop(true).
+			BorderLeft(true).
+			BorderRight(true).
+			BorderBottom(true)
+
+	buttonStyle = lipgloss.NewStyle().
+			Foreground(lipgloss.Color("#FFF7DB")).
+			Background(lipgloss.Color("#888B7E")).
+			Padding(0, 3).
+			MarginTop(1)
+
+	activeButtonStyle = buttonStyle.
+				Foreground(lipgloss.Color("#FFF7DB")).
+				Background(lipgloss.Color("#F25D94")).
+				MarginRight(2).
+				Underline(true)
+
+	subtle = lipgloss.AdaptiveColor{Light: "#D9DCCF", Dark: "#383838"}
+	blends = gamut.Blends(lipgloss.Color("#F25D94"), lipgloss.Color("#EDFF82"), 50)
+)
+
+func rainbow(base lipgloss.Style, s string, colors []color.Color) string {
+	var str string
+	for i, ss := range s {
+		color, _ := colorful.MakeColor(colors[i%len(colors)])
+		str = str + base.Foreground(lipgloss.Color(color.Hex())).Render(string(ss))
+	}
+	return str
 }

@@ -72,7 +72,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c", "q":
 			return m, tea.Quit
 		case "z":
-			m.Revealed = !m.Revealed
+			m.Revealed = !m.Revealed // OPINION: Reveal should be a toggle cus it sucks to accidentally press it
 		case "enter":
 			m.Revealed = false
 
@@ -107,6 +107,7 @@ func (m model) View() string {
 
 		ui := lipgloss.JoinVertical(lipgloss.Center, question, answer)
 
+		// OPINION: IDC about styling... may be nice to make it configurable
 		dialog := lipgloss.Place(physicalWidth, 9,
 			lipgloss.Center, lipgloss.Center,
 			dialogBoxStyle.Render(ui),

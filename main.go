@@ -58,7 +58,7 @@ func rainbow(base lipgloss.Style, s string, colors []color.Color) string {
 }
 
 type model struct {
-	tea.Model // FIXME: why dont the docs mention this?
+	tea.Model
 	CardIndex int
 	Revealed  bool
 }

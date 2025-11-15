@@ -8,6 +8,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	lipgloss "github.com/charmbracelet/lipgloss"
+	"github.com/charmbracelet/x/term"
 	"github.com/lucasb-eyer/go-colorful"
 	"github.com/muesli/gamut"
 )
@@ -36,16 +37,6 @@ var (
 
 	subtle = lipgloss.AdaptiveColor{Light: "#D9DCCF", Dark: "#383838"}
 	blends = gamut.Blends(lipgloss.Color("#F25D94"), lipgloss.Color("#EDFF82"), 50)
-)
-
-const (
-	// In real life situations we'd adjust the document to fit the width we've
-	// detected. In the case of this example we're hardcoding the width, and
-	// later using the detected width only to truncate in order to avoid jaggy
-	// wrapping.
-	width = 96
-
-	columnWidth = 30
 )
 
 func rainbow(base lipgloss.Style, s string, colors []color.Color) string {
@@ -98,19 +89,25 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m model) View() string {
 	s := strings.Builder{}
+	physicalWidth, _, _ := term.GetSize(uintptr((os.Stdout.Fd())))
+	docStyle := lipgloss.NewStyle().Padding(1, 2, 1, 2)
+	if physicalWidth > 0 {
+		docStyle = docStyle.MaxWidth(physicalWidth)
+	}
+	cardWidth := physicalWidth / 3
 
 	// Dialog Scope
 	{
-		question := lipgloss.NewStyle().Width(50).Align(lipgloss.Center).Render(rainbow(lipgloss.NewStyle(), testCards[m.CardIndex].Front, blends))
+		question := lipgloss.NewStyle().Width(cardWidth).Align(lipgloss.Center).Render(rainbow(lipgloss.NewStyle(), testCards[m.CardIndex].Front, blends))
 
 		answer := ""
 		if m.Revealed == true {
-			answer = lipgloss.NewStyle().Width(50).Align(lipgloss.Center).Render(testCards[m.CardIndex].Back)
+			answer = lipgloss.NewStyle().Width(cardWidth).Align(lipgloss.Center).Render(testCards[m.CardIndex].Back)
 		}
 
 		ui := lipgloss.JoinVertical(lipgloss.Center, question, answer)
 
-		dialog := lipgloss.Place(width, 9,
+		dialog := lipgloss.Place(physicalWidth, 9,
 			lipgloss.Center, lipgloss.Center,
 			dialogBoxStyle.Render(ui),
 			lipgloss.WithWhitespaceChars("猫咪"),

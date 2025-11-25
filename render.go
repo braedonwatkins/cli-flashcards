@@ -51,7 +51,14 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			} else {
 				return m, tea.Quit
 			}
+		case "backspace":
+			m.Revealed = false
+
+			if m.CardIndex > 0 {
+				m.CardIndex--
+			}
 		}
+
 	}
 
 	return m, nil

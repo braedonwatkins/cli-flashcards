@@ -45,27 +45,21 @@ type Token struct {
 func parse() {
 	file, err := os.Open("./card.abc")
 	if err != nil {
-		// FIXME: what's the space of options for handling errs (log.Fatalf, panic, etc)
 		log.Fatalf("impossible to open file: %s", err)
 	}
 
-	defer file.Close() // FIXME: how's defer work
+	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 
-	// FIXME: reminder on looping in golang... how is this looping??
 	for scanner.Scan() {
-		//FIXME: what's the space of APIs on scanners...
-		// is bufio the canonical way to do this in golang
 		line := scanner.Text()
 
 		fmt.Print("+ " + line)
-		//FIXME: reminder on how to do input (scanf in golang)
 		var input string
 		fmt.Scanln(&input)
 	}
 
-	// FIXME: what sort of errors can be encountered here??
 	if err := scanner.Err(); err != nil {
 		log.Fatalf("scanner encountered an error: %s", err)
 	}

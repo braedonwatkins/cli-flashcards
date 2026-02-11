@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 type TokenType int
@@ -28,12 +29,22 @@ const (
 	AnswerStart
 )
 
-var (
-	DeckMetaDelimToken = Token{Type: DeckMetaDelim, Literal: "==="}
-	CardMetaDelimToken = Token{Type: CardMetaDelim, Literal: "---"}
-	QuestionStartToken = Token{Type: QuestionStart, Literal: "Q:"}
-	AnswerStartToken   = Token{Type: AnswerStart, Literal: "A:"}
-)
+var tokenTable = []Token{
+	{Type: DeckMetaDelim, Literal: "==="},
+	{Type: CardMetaDelim, Literal: "---"},
+	{Type: QuestionStart, Literal: "Q:"},
+	{Type: AnswerStart, Literal: "A:"},
+}
+
+var tokenByLiteral = func() map[string]Token {
+	m := make(map[string]Token, len(tokenTable))
+
+	for _, t := range tokenTable {
+		m[t.Literal] = t
+	}
+
+	return m
+}()
 
 type Token struct {
 	Type    TokenType

@@ -64,9 +64,16 @@ func parse() {
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
-		line := scanner.Text()
+		rawLine := scanner.Text()
 
-		fmt.Print("+ " + line)
+		fmt.Print("+ " + rawLine)
+		trimmedLine := strings.TrimSpace(rawLine)
+
+		if token, ok := tokenByLiteral[trimmedLine]; ok {
+			fmt.Print(" " + fmt.Sprint(token.Type))
+		} else {
+		}
+
 		var input string
 		fmt.Scanln(&input)
 	}
